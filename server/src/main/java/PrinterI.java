@@ -1,7 +1,9 @@
-public class PrinterI implements Demo.Printer
+import com.zeroc.Ice.Current;
+
+public class PrinterI implements Deploy.FibonacciPrinter
 {
-    public void printString(String s, com.zeroc.Ice.Current current)
-    {
+    @Override
+    public void printFibonacci(String s, Current current) {
         System.out.println(s);
     }
 }

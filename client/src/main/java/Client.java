@@ -7,16 +7,16 @@ public class Client
         try(com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args,"config.client",extraArgs))
         {
             //com.zeroc.Ice.ObjectPrx base = communicator.stringToProxy("SimplePrinter:default -p 10000");
-            Demo.PrinterPrx twoway = Demo.PrinterPrx.checkedCast(
+            Deploy.FibonacciPrinterPrx twoway = Deploy.FibonacciPrinterPrx.checkedCast(
                 communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
             //Demo.PrinterPrx printer = Demo.PrinterPrx.checkedCast(base);
-            Demo.PrinterPrx printer = twoway.ice_oneway();
+            Deploy.FibonacciPrinterPrx printer = twoway.ice_oneway();
 
             if(printer == null)
             {
                 throw new Error("Invalid proxy");
             }
-            printer.printString("Hello World!");
+            printer.printFibonacci("Hello World!");
         }
     }
 }
