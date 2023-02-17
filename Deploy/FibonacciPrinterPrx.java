@@ -17,38 +17,40 @@ package Deploy;
 
 public interface FibonacciPrinterPrx extends com.zeroc.Ice.ObjectPrx
 {
-    default void printFibonacci(String s)
+    default void printFibonacci(String hostname, String input)
     {
-        printFibonacci(s, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+        printFibonacci(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
     }
 
-    default void printFibonacci(String s, java.util.Map<String, String> context)
+    default void printFibonacci(String hostname, String input, java.util.Map<String, String> context)
     {
-        _iceI_printFibonacciAsync(s, context, true).waitForResponse();
+        _iceI_printFibonacciAsync(hostname, input, context, true).waitForResponse();
     }
 
-    default java.util.concurrent.CompletableFuture<Void> printFibonacciAsync(String s)
+    default java.util.concurrent.CompletableFuture<Void> printFibonacciAsync(String hostname, String input)
     {
-        return _iceI_printFibonacciAsync(s, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+        return _iceI_printFibonacciAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
     }
 
-    default java.util.concurrent.CompletableFuture<Void> printFibonacciAsync(String s, java.util.Map<String, String> context)
+    default java.util.concurrent.CompletableFuture<Void> printFibonacciAsync(String hostname, String input, java.util.Map<String, String> context)
     {
-        return _iceI_printFibonacciAsync(s, context, false);
+        return _iceI_printFibonacciAsync(hostname, input, context, false);
     }
 
     /**
      * @hidden
-     * @param iceP_s -
+     * @param iceP_hostname -
+     * @param iceP_input -
      * @param context -
      * @param sync -
      * @return -
      **/
-    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_printFibonacciAsync(String iceP_s, java.util.Map<String, String> context, boolean sync)
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_printFibonacciAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
     {
         com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "printFibonacci", null, sync, null);
         f.invoke(false, context, null, ostr -> {
-                     ostr.writeString(iceP_s);
+                     ostr.writeString(iceP_hostname);
+                     ostr.writeString(iceP_input);
                  }, null);
         return f;
     }
