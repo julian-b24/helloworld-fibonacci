@@ -19,7 +19,7 @@ public class Client {
             Deploy.FibonacciPrinterPrx twoway = Deploy.FibonacciPrinterPrx.checkedCast(
                     communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
             //Demo.PrinterPrx printer = Demo.PrinterPrx.checkedCast(base);
-            Deploy.FibonacciPrinterPrx printer = twoway.ice_oneway();
+            Deploy.FibonacciPrinterPrx printer = twoway.ice_twoway().ice_timeout(100000);
 
             if (printer == null) {
                 throw new Error("Invalid proxy");
@@ -38,7 +38,7 @@ public class Client {
         do {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             input = reader.readLine();
-            printer.printFibonacci(hostname, input);
+            System.out.println(printer.printFibonacci(hostname, input));
 
         } while (!input.equals(EXIT_STRING));
     }

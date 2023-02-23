@@ -17,7 +17,7 @@ package Deploy;
 
 public interface FibonacciPrinter extends com.zeroc.Ice.Object
 {
-    void printFibonacci(String hostname, String input, com.zeroc.Ice.Current current);
+    int printFibonacci(String hostname, String input, com.zeroc.Ice.Current current);
 
     /** @hidden */
     static final String[] _iceIds =
@@ -59,8 +59,11 @@ public interface FibonacciPrinter extends com.zeroc.Ice.Object
         iceP_hostname = istr.readString();
         iceP_input = istr.readString();
         inS.endReadParams();
-        obj.printFibonacci(iceP_hostname, iceP_input, current);
-        return inS.setResult(inS.writeEmptyParams());
+        int ret = obj.printFibonacci(iceP_hostname, iceP_input, current);
+        com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
+        ostr.writeInt(ret);
+        inS.endWriteParams(ostr);
+        return inS.setResult(ostr);
     }
 
     /** @hidden */

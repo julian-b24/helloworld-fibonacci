@@ -2,6 +2,6 @@ module Deploy
 {
     interface FibonacciPrinter
     {
-        void printFibonacci(string hostname, string input);
+        int printFibonacci(string hostname, string input);
     }
 }
