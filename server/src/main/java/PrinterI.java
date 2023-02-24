@@ -11,14 +11,15 @@ public class PrinterI implements Deploy.FibonacciPrinter
         if(validateInputIsNumber(input)){
             int inputNumber = new Integer(input);
             output = calculateFibonacci(inputNumber);
-            showFibonacciSequence(inputNumber);
+            showFibonacciSequence(hostname, inputNumber);
         }
         return output;
     }
 
-    private void showFibonacciSequence(int input) {
+    private void showFibonacciSequence(String hostname, int input) {
         while (input > 0){
-            System.out.println(calculateFibonacci(input));
+            int number = calculateFibonacci(input);
+            showMessageCmd(hostname, number+"");
             input--;
         }
     }
