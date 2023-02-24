@@ -9,20 +9,28 @@ public class PrinterI implements Deploy.FibonacciPrinter
         showMessageCmd(hostname, input);
         int output = 0;
         if(validateInputIsNumber(input)){
-            output = calculateFibonacci(input);
+            int inputNumber = new Integer(input);
+            output = calculateFibonacci(inputNumber);
+            showFibonacciSequence(inputNumber);
         }
         return output;
     }
 
-    private int calculateFibonacci(String input) {
-        int inputNumber = new Integer(input);
+    private void showFibonacciSequence(int input) {
+        while (input > 0){
+            System.out.println(calculateFibonacci(input));
+            input--;
+        }
+    }
+
+    private int calculateFibonacci(int input) {
         FibonacciService fibonacciService = new FibonacciImpl();
-        int result = fibonacciService.calculateFibonacci(inputNumber);
+        int result = fibonacciService.calculateFibonacci(input);
         return result;
     }
 
     private void showMessageCmd(String hostname, String input){
-        String message = hostname + ": " + input;
+        String message = hostname + ":" + input;
         System.out.println(message);
     }
 
