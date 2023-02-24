@@ -9,7 +9,7 @@ public class FibonacciImpl implements FibonacciService{
     @Override
     public int calculateFibonacci(int number) {
         if (number <= 1) {
-            return number;
+            return 0;
         } else if (memory.containsKey(number)) {
             return memory.get(number);
         } else {
