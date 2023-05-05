@@ -8,6 +8,7 @@ public class FibonacciServiceImpl implements FibonacciService {
 
     private static HashMap<Integer, Integer> memory = new HashMap<>();
 
+
     @Override
     public int calculateFibonacci(int number) {
         if (number <= 1) {
