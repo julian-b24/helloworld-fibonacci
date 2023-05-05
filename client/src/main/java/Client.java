@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class Client {
 
@@ -20,27 +19,28 @@ public class Client {
             Deploy.HelloWorldCallbackPrx twoway = Deploy.HelloWorldCallbackPrx.checkedCast(
                     communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
             //Demo.PrinterPrx printer = Demo.PrinterPrx.checkedCast(base);
-            Deploy.HelloWorldCallbackPrx printer = twoway.ice_twoway().ice_timeout(100000);
+            Deploy.HelloWorldCallbackPrx helloWorldCallbackPrx = twoway.ice_twoway().ice_timeout(100000);
 
-            if (printer == null) {
+            if (helloWorldCallbackPrx == null) {
                 throw new Error("Invalid proxy");
             }
 
-            sendRequest(printer);
+            sendRequest(helloWorldCallbackPrx);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void sendRequest(HelloWorldCallbackPrx printer) throws IOException {
+    private static void sendRequest(HelloWorldCallbackPrx helloWorldCallbackPrx) throws IOException {
         String hostname = getHostName();
         String input = "";
         do {
             System.out.println("Input:");
             input = READER.readLine();
             if(!input.equals(EXIT_STRING)){
-                System.out.println(printer.printFibonacci(hostname, input));
+                //System.out.println(printer.printFibonacci(hostname, input));
+                System.out.println(helloWorldCallbackPrx.registerClient(hostname));
             }
         } while (!input.equals(EXIT_STRING));
     }
