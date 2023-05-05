@@ -1,5 +1,6 @@
 package service.impl;
 
+import constants.RegisterResponseMessage;
 import service.RegisterService;
 
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ public class RegisterServiceImpl implements RegisterService {
     public String registerHost(String hostname) {
         validateHostIsNotInList(hostname);
         registerList.add(hostname);
-        return "Successful register of " + hostname;
+        return RegisterResponseMessage.SUCCESSFUL.getMessage() + hostname;
     }
 
     private void validateHostIsNotInList(String hostname) {
         if(registerList.contains(hostname)){
-            throw new RuntimeException("Host is already registered");
+            throw new RuntimeException(RegisterResponseMessage.FAIL_HOST_EXISTS.getMessage());
         }
     }
 }
