@@ -1,8 +1,10 @@
-package utils;
+package service.impl;
+
+import service.FibonacciService;
 
 import java.util.HashMap;
 
-public class FibonacciImpl implements FibonacciService{
+public class FibonacciServiceImpl implements FibonacciService {
 
     private static HashMap<Integer, Integer> memory = new HashMap<>();
 

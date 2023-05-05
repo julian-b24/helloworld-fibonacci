@@ -1,8 +1,8 @@
 import com.zeroc.Ice.Current;
-import utils.FibonacciImpl;
-import utils.FibonacciService;
+import service.impl.FibonacciServiceImpl;
+import service.FibonacciService;
 
-public class PrinterI implements Deploy.FibonacciPrinter
+public class HelloWorldController implements Deploy.HelloWorldCallback
 {
     @Override
     public int printFibonacci(String hostname, String input, Current current) {
@@ -25,7 +25,7 @@ public class PrinterI implements Deploy.FibonacciPrinter
     }
 
     private int calculateFibonacci(int input) {
-        FibonacciService fibonacciService = new FibonacciImpl();
+        FibonacciService fibonacciService = new FibonacciServiceImpl();
         int result = fibonacciService.calculateFibonacci(input);
         return result;
     }

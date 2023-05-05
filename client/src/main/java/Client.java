@@ -1,4 +1,4 @@
-import Deploy.FibonacciPrinterPrx;
+import Deploy.HelloWorldCallbackPrx;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,10 +17,10 @@ public class Client {
 
         try (com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.client", extraArgs)) {
             //com.zeroc.Ice.ObjectPrx base = communicator.stringToProxy("SimplePrinter:default -p 10000");
-            Deploy.FibonacciPrinterPrx twoway = Deploy.FibonacciPrinterPrx.checkedCast(
+            Deploy.HelloWorldCallbackPrx twoway = Deploy.HelloWorldCallbackPrx.checkedCast(
                     communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
             //Demo.PrinterPrx printer = Demo.PrinterPrx.checkedCast(base);
-            Deploy.FibonacciPrinterPrx printer = twoway.ice_twoway().ice_timeout(100000);
+            Deploy.HelloWorldCallbackPrx printer = twoway.ice_twoway().ice_timeout(100000);
 
             if (printer == null) {
                 throw new Error("Invalid proxy");
@@ -33,7 +33,7 @@ public class Client {
         }
     }
 
-    private static void sendRequest(FibonacciPrinterPrx printer) throws IOException {
+    private static void sendRequest(HelloWorldCallbackPrx printer) throws IOException {
         String hostname = getHostName();
         String input = "";
         do {

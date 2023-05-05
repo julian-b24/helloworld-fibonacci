@@ -1,6 +1,6 @@
 module Deploy
 {
-    interface FibonacciPrinter
+    interface HelloWorldCallback
     {
         int printFibonacci(string hostname, string input);
     }
