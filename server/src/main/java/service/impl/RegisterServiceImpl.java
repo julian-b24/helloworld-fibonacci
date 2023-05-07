@@ -1,28 +1,32 @@
 package service.impl;
 
+import Deploy.HelloWorldCallbackReceiverPrx;
 import constants.RegisterResponseMessage;
 import service.RegisterService;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterServiceImpl implements RegisterService {
 
-    private ArrayList<String> registerList;
+    private Map<String, Object> registerMap;
 
     public RegisterServiceImpl(){
-        registerList = new ArrayList<>();
+        registerMap = new HashMap<>();
     }
 
     @Override
-    public String registerHost(String hostname) {
-        validateHostIsNotInList(hostname);
-        registerList.add(hostname);
+    public String registerHost(String hostname, HelloWorldCallbackReceiverPrx proxy) {
+        validateHostIsNotInMap(hostname);
+        registerMap.put(hostname, proxy);
+        System.out.println(registerMap);
+        proxy.receiveMessage();
         return RegisterResponseMessage.SUCCESSFUL.getMessage() + hostname;
     }
 
-    private void validateHostIsNotInList(String hostname) {
-        if(registerList.contains(hostname)){
-            throw new RuntimeException(RegisterResponseMessage.FAIL_HOST_EXISTS.getMessage());
+    private void validateHostIsNotInMap(String hostname) {
+        if(registerMap.containsKey(hostname)){
+            System.out.println("Host is already registered");
         }
     }
 }

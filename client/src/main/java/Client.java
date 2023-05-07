@@ -1,55 +1,38 @@
-import Deploy.HelloWorldCallbackPrx;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
+import Deploy.HelloWorldCallbackReceiverPrx;
+import Deploy.HelloWorldCallbackSenderPrx;
+import com.zeroc.Ice.ObjectAdapter;
 
 public class Client {
-
-    private final static BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
-    private final static String EXIT_STRING = "exit";
-
 
     public static void main(String[] args) {
         java.util.List<String> extraArgs = new java.util.ArrayList<>();
 
         try (com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.client", extraArgs)) {
-            //com.zeroc.Ice.ObjectPrx base = communicator.stringToProxy("SimplePrinter:default -p 10000");
-            Deploy.HelloWorldCallbackPrx twoway = Deploy.HelloWorldCallbackPrx.checkedCast(
-                    communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
-            //Demo.PrinterPrx printer = Demo.PrinterPrx.checkedCast(base);
-            Deploy.HelloWorldCallbackPrx helloWorldCallbackPrx = twoway.ice_twoway().ice_timeout(100000);
 
-            if (helloWorldCallbackPrx == null) {
+            //Create of sender proxy
+            HelloWorldCallbackSenderPrx twoway = HelloWorldCallbackSenderPrx.checkedCast(
+                    communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
+            HelloWorldCallbackSenderPrx senderPrx = twoway.ice_twoway().ice_timeout(100000);
+
+            if (senderPrx == null) {
                 throw new Error("Invalid proxy");
             }
 
-            sendRequest(helloWorldCallbackPrx);
+            ObjectAdapter adapter = communicator.createObjectAdapter("Callback.Client");
+            com.zeroc.Ice.Object object = new HelloWorldClientController();
+            adapter.add(object, com.zeroc.Ice.Util.stringToIdentity("HelloWorldCallbackReceiver"));
+            adapter.activate();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            HelloWorldCallbackReceiverPrx receiver = HelloWorldCallbackReceiverPrx.uncheckedCast(
+                    adapter.createProxy(com.zeroc.Ice.Util.stringToIdentity("HelloWorldCallbackReceiver"))
+            );
+
+            HelloWorldClientController controller = new HelloWorldClientController(senderPrx, receiver);
+            controller.executeClient();
+
+            communicator.waitForShutdown();
+
         }
-    }
-
-    private static void sendRequest(HelloWorldCallbackPrx helloWorldCallbackPrx) throws IOException {
-        String hostname = getHostName();
-        String input = "";
-        do {
-            System.out.println("Input:");
-            input = READER.readLine();
-            if(!input.equals(EXIT_STRING)){
-                //System.out.println(printer.printFibonacci(hostname, input));
-                System.out.println(helloWorldCallbackPrx.registerClient(hostname));
-            }
-        } while (!input.equals(EXIT_STRING));
-    }
-
-    private static String getHostName() throws IOException {
-        System.out.println("Who are you? :");
-        String whoami = READER.readLine();
-        String hostname = InetAddress.getLocalHost().getHostName();
-        return whoami + "@" + hostname;
     }
 
 }

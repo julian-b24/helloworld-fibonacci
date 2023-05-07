@@ -16,7 +16,7 @@
 package Deploy;
 
 /** @hidden */
-public class _HelloWorldCallbackPrxI extends com.zeroc.Ice._ObjectPrxI implements HelloWorldCallbackPrx
+public class _HelloWorldCallbackReceiverPrxI extends com.zeroc.Ice._ObjectPrxI implements HelloWorldCallbackReceiverPrx
 {
     /** @hidden */
     public static final long serialVersionUID = 0L;

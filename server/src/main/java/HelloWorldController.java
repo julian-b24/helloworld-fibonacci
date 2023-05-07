@@ -1,3 +1,4 @@
+import Deploy.HelloWorldCallbackReceiverPrx;
 import com.zeroc.Ice.Current;
 import service.RegisterService;
 import service.impl.FibonacciServiceImpl;
@@ -6,7 +7,7 @@ import service.impl.RegisterServiceImpl;
 
 import java.util.ArrayList;
 
-public class HelloWorldController implements Deploy.HelloWorldCallback {
+public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
 
     private RegisterService registerService;
     private FibonacciService fibonacciService;
@@ -29,8 +30,8 @@ public class HelloWorldController implements Deploy.HelloWorldCallback {
     }
 
     @Override
-    public String registerClient(String hostname, Current current) {
-        return registerService.registerHost(hostname);
+    public String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname, Current current) {
+        return registerService.registerHost(hostname, proxy);
     }
 
     private void showFibonacciSequence(String hostname, int input) {

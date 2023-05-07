@@ -15,14 +15,16 @@
 
 package Deploy;
 
-public interface HelloWorldCallback extends com.zeroc.Ice.Object
+public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
 {
     int printFibonacci(String hostname, String input, com.zeroc.Ice.Current current);
+
+    String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname, com.zeroc.Ice.Current current);
 
     /** @hidden */
     static final String[] _iceIds =
     {
-        "::Deploy::HelloWorldCallback",
+        "::Deploy::HelloWorldCallbackSender",
         "::Ice::Object"
     };
 
@@ -40,7 +42,7 @@ public interface HelloWorldCallback extends com.zeroc.Ice.Object
 
     static String ice_staticId()
     {
-        return "::Deploy::HelloWorldCallback";
+        return "::Deploy::HelloWorldCallbackSender";
     }
 
     /**
@@ -50,7 +52,7 @@ public interface HelloWorldCallback extends com.zeroc.Ice.Object
      * @param current -
      * @return -
     **/
-    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_printFibonacci(HelloWorldCallback obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_printFibonacci(HelloWorldCallbackSender obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
     {
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
         com.zeroc.Ice.InputStream istr = inS.startReadParams();
@@ -66,6 +68,29 @@ public interface HelloWorldCallback extends com.zeroc.Ice.Object
         return inS.setResult(ostr);
     }
 
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_registerClient(HelloWorldCallbackSender obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        HelloWorldCallbackReceiverPrx iceP_proxy;
+        String iceP_hostname;
+        iceP_proxy = HelloWorldCallbackReceiverPrx.uncheckedCast(istr.readProxy());
+        iceP_hostname = istr.readString();
+        inS.endReadParams();
+        String ret = obj.registerClient(iceP_proxy, iceP_hostname, current);
+        com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
+        ostr.writeString(ret);
+        inS.endWriteParams(ostr);
+        return inS.setResult(ostr);
+    }
+
     /** @hidden */
     final static String[] _iceOps =
     {
@@ -73,7 +98,8 @@ public interface HelloWorldCallback extends com.zeroc.Ice.Object
         "ice_ids",
         "ice_isA",
         "ice_ping",
-        "printFibonacci"
+        "printFibonacci",
+        "registerClient"
     };
 
     /** @hidden */
@@ -108,6 +134,10 @@ public interface HelloWorldCallback extends com.zeroc.Ice.Object
             case 4:
             {
                 return _iceD_printFibonacci(this, in, current);
+            }
+            case 5:
+            {
+                return _iceD_registerClient(this, in, current);
             }
         }
 

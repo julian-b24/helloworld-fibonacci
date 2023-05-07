@@ -15,7 +15,7 @@
 
 package Deploy;
 
-public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
+public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
 {
     default int printFibonacci(String hostname, String input)
     {
@@ -59,15 +59,57 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
         return f;
     }
 
+    default String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname)
+    {
+        return registerClient(proxy, hostname, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname, java.util.Map<String, String> context)
+    {
+        return _iceI_registerClientAsync(proxy, hostname, context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<java.lang.String> registerClientAsync(HelloWorldCallbackReceiverPrx proxy, String hostname)
+    {
+        return _iceI_registerClientAsync(proxy, hostname, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<java.lang.String> registerClientAsync(HelloWorldCallbackReceiverPrx proxy, String hostname, java.util.Map<String, String> context)
+    {
+        return _iceI_registerClientAsync(proxy, hostname, context, false);
+    }
+
+    /**
+     * @hidden
+     * @param iceP_proxy -
+     * @param iceP_hostname -
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_registerClientAsync(HelloWorldCallbackReceiverPrx iceP_proxy, String iceP_hostname, java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "registerClient", null, sync, null);
+        f.invoke(true, context, null, ostr -> {
+                     ostr.writeProxy(iceP_proxy);
+                     ostr.writeString(iceP_hostname);
+                 }, istr -> {
+                     String ret;
+                     ret = istr.readString();
+                     return ret;
+                 });
+        return f;
+    }
+
     /**
      * Contacts the remote server to verify that the object implements this type.
      * Raises a local exception if a communication error occurs.
      * @param obj The untyped proxy.
      * @return A proxy for this type, or null if the object does not support this type.
      **/
-    static HelloWorldCallbackPrx checkedCast(com.zeroc.Ice.ObjectPrx obj)
+    static HelloWorldCallbackSenderPrx checkedCast(com.zeroc.Ice.ObjectPrx obj)
     {
-        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, ice_staticId(), HelloWorldCallbackPrx.class, _HelloWorldCallbackPrxI.class);
+        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, ice_staticId(), HelloWorldCallbackSenderPrx.class, _HelloWorldCallbackSenderPrxI.class);
     }
 
     /**
@@ -77,9 +119,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @param context The Context map to send with the invocation.
      * @return A proxy for this type, or null if the object does not support this type.
      **/
-    static HelloWorldCallbackPrx checkedCast(com.zeroc.Ice.ObjectPrx obj, java.util.Map<String, String> context)
+    static HelloWorldCallbackSenderPrx checkedCast(com.zeroc.Ice.ObjectPrx obj, java.util.Map<String, String> context)
     {
-        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, context, ice_staticId(), HelloWorldCallbackPrx.class, _HelloWorldCallbackPrxI.class);
+        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, context, ice_staticId(), HelloWorldCallbackSenderPrx.class, _HelloWorldCallbackSenderPrxI.class);
     }
 
     /**
@@ -89,9 +131,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @param facet The name of the desired facet.
      * @return A proxy for this type, or null if the object does not support this type.
      **/
-    static HelloWorldCallbackPrx checkedCast(com.zeroc.Ice.ObjectPrx obj, String facet)
+    static HelloWorldCallbackSenderPrx checkedCast(com.zeroc.Ice.ObjectPrx obj, String facet)
     {
-        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, facet, ice_staticId(), HelloWorldCallbackPrx.class, _HelloWorldCallbackPrxI.class);
+        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, facet, ice_staticId(), HelloWorldCallbackSenderPrx.class, _HelloWorldCallbackSenderPrxI.class);
     }
 
     /**
@@ -102,9 +144,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @param context The Context map to send with the invocation.
      * @return A proxy for this type, or null if the object does not support this type.
      **/
-    static HelloWorldCallbackPrx checkedCast(com.zeroc.Ice.ObjectPrx obj, String facet, java.util.Map<String, String> context)
+    static HelloWorldCallbackSenderPrx checkedCast(com.zeroc.Ice.ObjectPrx obj, String facet, java.util.Map<String, String> context)
     {
-        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, facet, context, ice_staticId(), HelloWorldCallbackPrx.class, _HelloWorldCallbackPrxI.class);
+        return com.zeroc.Ice.ObjectPrx._checkedCast(obj, facet, context, ice_staticId(), HelloWorldCallbackSenderPrx.class, _HelloWorldCallbackSenderPrxI.class);
     }
 
     /**
@@ -112,9 +154,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @param obj The untyped proxy.
      * @return A proxy for this type.
      **/
-    static HelloWorldCallbackPrx uncheckedCast(com.zeroc.Ice.ObjectPrx obj)
+    static HelloWorldCallbackSenderPrx uncheckedCast(com.zeroc.Ice.ObjectPrx obj)
     {
-        return com.zeroc.Ice.ObjectPrx._uncheckedCast(obj, HelloWorldCallbackPrx.class, _HelloWorldCallbackPrxI.class);
+        return com.zeroc.Ice.ObjectPrx._uncheckedCast(obj, HelloWorldCallbackSenderPrx.class, _HelloWorldCallbackSenderPrxI.class);
     }
 
     /**
@@ -123,9 +165,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @param facet The name of the desired facet.
      * @return A proxy for this type.
      **/
-    static HelloWorldCallbackPrx uncheckedCast(com.zeroc.Ice.ObjectPrx obj, String facet)
+    static HelloWorldCallbackSenderPrx uncheckedCast(com.zeroc.Ice.ObjectPrx obj, String facet)
     {
-        return com.zeroc.Ice.ObjectPrx._uncheckedCast(obj, facet, HelloWorldCallbackPrx.class, _HelloWorldCallbackPrxI.class);
+        return com.zeroc.Ice.ObjectPrx._uncheckedCast(obj, facet, HelloWorldCallbackSenderPrx.class, _HelloWorldCallbackSenderPrxI.class);
     }
 
     /**
@@ -134,9 +176,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified per-proxy context.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_context(java.util.Map<String, String> newContext)
+    default HelloWorldCallbackSenderPrx ice_context(java.util.Map<String, String> newContext)
     {
-        return (HelloWorldCallbackPrx)_ice_context(newContext);
+        return (HelloWorldCallbackSenderPrx)_ice_context(newContext);
     }
 
     /**
@@ -145,9 +187,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified adapter ID.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_adapterId(String newAdapterId)
+    default HelloWorldCallbackSenderPrx ice_adapterId(String newAdapterId)
     {
-        return (HelloWorldCallbackPrx)_ice_adapterId(newAdapterId);
+        return (HelloWorldCallbackSenderPrx)_ice_adapterId(newAdapterId);
     }
 
     /**
@@ -156,9 +198,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified endpoints.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_endpoints(com.zeroc.Ice.Endpoint[] newEndpoints)
+    default HelloWorldCallbackSenderPrx ice_endpoints(com.zeroc.Ice.Endpoint[] newEndpoints)
     {
-        return (HelloWorldCallbackPrx)_ice_endpoints(newEndpoints);
+        return (HelloWorldCallbackSenderPrx)_ice_endpoints(newEndpoints);
     }
 
     /**
@@ -167,9 +209,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified locator cache timeout.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_locatorCacheTimeout(int newTimeout)
+    default HelloWorldCallbackSenderPrx ice_locatorCacheTimeout(int newTimeout)
     {
-        return (HelloWorldCallbackPrx)_ice_locatorCacheTimeout(newTimeout);
+        return (HelloWorldCallbackSenderPrx)_ice_locatorCacheTimeout(newTimeout);
     }
 
     /**
@@ -178,9 +220,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified invocation timeout.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_invocationTimeout(int newTimeout)
+    default HelloWorldCallbackSenderPrx ice_invocationTimeout(int newTimeout)
     {
-        return (HelloWorldCallbackPrx)_ice_invocationTimeout(newTimeout);
+        return (HelloWorldCallbackSenderPrx)_ice_invocationTimeout(newTimeout);
     }
 
     /**
@@ -189,9 +231,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified caching policy.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_connectionCached(boolean newCache)
+    default HelloWorldCallbackSenderPrx ice_connectionCached(boolean newCache)
     {
-        return (HelloWorldCallbackPrx)_ice_connectionCached(newCache);
+        return (HelloWorldCallbackSenderPrx)_ice_connectionCached(newCache);
     }
 
     /**
@@ -200,9 +242,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified endpoint selection policy.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_endpointSelection(com.zeroc.Ice.EndpointSelectionType newType)
+    default HelloWorldCallbackSenderPrx ice_endpointSelection(com.zeroc.Ice.EndpointSelectionType newType)
     {
-        return (HelloWorldCallbackPrx)_ice_endpointSelection(newType);
+        return (HelloWorldCallbackSenderPrx)_ice_endpointSelection(newType);
     }
 
     /**
@@ -213,9 +255,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified selection policy.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_secure(boolean b)
+    default HelloWorldCallbackSenderPrx ice_secure(boolean b)
     {
-        return (HelloWorldCallbackPrx)_ice_secure(b);
+        return (HelloWorldCallbackSenderPrx)_ice_secure(b);
     }
 
     /**
@@ -224,9 +266,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified encoding version.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_encodingVersion(com.zeroc.Ice.EncodingVersion e)
+    default HelloWorldCallbackSenderPrx ice_encodingVersion(com.zeroc.Ice.EncodingVersion e)
     {
-        return (HelloWorldCallbackPrx)_ice_encodingVersion(e);
+        return (HelloWorldCallbackSenderPrx)_ice_encodingVersion(e);
     }
 
     /**
@@ -237,9 +279,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified selection policy.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_preferSecure(boolean b)
+    default HelloWorldCallbackSenderPrx ice_preferSecure(boolean b)
     {
-        return (HelloWorldCallbackPrx)_ice_preferSecure(b);
+        return (HelloWorldCallbackSenderPrx)_ice_preferSecure(b);
     }
 
     /**
@@ -248,9 +290,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified router.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_router(com.zeroc.Ice.RouterPrx router)
+    default HelloWorldCallbackSenderPrx ice_router(com.zeroc.Ice.RouterPrx router)
     {
-        return (HelloWorldCallbackPrx)_ice_router(router);
+        return (HelloWorldCallbackSenderPrx)_ice_router(router);
     }
 
     /**
@@ -259,9 +301,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified locator.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_locator(com.zeroc.Ice.LocatorPrx locator)
+    default HelloWorldCallbackSenderPrx ice_locator(com.zeroc.Ice.LocatorPrx locator)
     {
-        return (HelloWorldCallbackPrx)_ice_locator(locator);
+        return (HelloWorldCallbackSenderPrx)_ice_locator(locator);
     }
 
     /**
@@ -270,9 +312,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified collocation optimization.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_collocationOptimized(boolean b)
+    default HelloWorldCallbackSenderPrx ice_collocationOptimized(boolean b)
     {
-        return (HelloWorldCallbackPrx)_ice_collocationOptimized(b);
+        return (HelloWorldCallbackSenderPrx)_ice_collocationOptimized(b);
     }
 
     /**
@@ -280,9 +322,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy that uses twoway invocations.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_twoway()
+    default HelloWorldCallbackSenderPrx ice_twoway()
     {
-        return (HelloWorldCallbackPrx)_ice_twoway();
+        return (HelloWorldCallbackSenderPrx)_ice_twoway();
     }
 
     /**
@@ -290,9 +332,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy that uses oneway invocations.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_oneway()
+    default HelloWorldCallbackSenderPrx ice_oneway()
     {
-        return (HelloWorldCallbackPrx)_ice_oneway();
+        return (HelloWorldCallbackSenderPrx)_ice_oneway();
     }
 
     /**
@@ -300,9 +342,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy that uses batch oneway invocations.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_batchOneway()
+    default HelloWorldCallbackSenderPrx ice_batchOneway()
     {
-        return (HelloWorldCallbackPrx)_ice_batchOneway();
+        return (HelloWorldCallbackSenderPrx)_ice_batchOneway();
     }
 
     /**
@@ -310,9 +352,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy that uses datagram invocations.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_datagram()
+    default HelloWorldCallbackSenderPrx ice_datagram()
     {
-        return (HelloWorldCallbackPrx)_ice_datagram();
+        return (HelloWorldCallbackSenderPrx)_ice_datagram();
     }
 
     /**
@@ -320,9 +362,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy that uses batch datagram invocations.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_batchDatagram()
+    default HelloWorldCallbackSenderPrx ice_batchDatagram()
     {
-        return (HelloWorldCallbackPrx)_ice_batchDatagram();
+        return (HelloWorldCallbackSenderPrx)_ice_batchDatagram();
     }
 
     /**
@@ -331,9 +373,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified compression setting.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_compress(boolean co)
+    default HelloWorldCallbackSenderPrx ice_compress(boolean co)
     {
-        return (HelloWorldCallbackPrx)_ice_compress(co);
+        return (HelloWorldCallbackSenderPrx)_ice_compress(co);
     }
 
     /**
@@ -342,9 +384,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified timeout.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_timeout(int t)
+    default HelloWorldCallbackSenderPrx ice_timeout(int t)
     {
-        return (HelloWorldCallbackPrx)_ice_timeout(t);
+        return (HelloWorldCallbackSenderPrx)_ice_timeout(t);
     }
 
     /**
@@ -353,9 +395,9 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A proxy with the specified connection ID.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_connectionId(String connectionId)
+    default HelloWorldCallbackSenderPrx ice_connectionId(String connectionId)
     {
-        return (HelloWorldCallbackPrx)_ice_connectionId(connectionId);
+        return (HelloWorldCallbackSenderPrx)_ice_connectionId(connectionId);
     }
 
     /**
@@ -364,13 +406,13 @@ public interface HelloWorldCallbackPrx extends com.zeroc.Ice.ObjectPrx
      * @return A fixed proxy bound to the given connection.
      **/
     @Override
-    default HelloWorldCallbackPrx ice_fixed(com.zeroc.Ice.Connection connection)
+    default HelloWorldCallbackSenderPrx ice_fixed(com.zeroc.Ice.Connection connection)
     {
-        return (HelloWorldCallbackPrx)_ice_fixed(connection);
+        return (HelloWorldCallbackSenderPrx)_ice_fixed(connection);
     }
 
     static String ice_staticId()
     {
-        return "::Deploy::HelloWorldCallback";
+        return "::Deploy::HelloWorldCallbackSender";
     }
 }
