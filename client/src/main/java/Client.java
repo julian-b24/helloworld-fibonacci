@@ -27,7 +27,7 @@ public class Client {
                     adapter.createProxy(com.zeroc.Ice.Util.stringToIdentity("HelloWorldCallbackReceiver"))
             );
 
-            HelloWorldClientController controller = new HelloWorldClientController(senderPrx, receiver);
+            HelloWorldClientController controller = new HelloWorldClientController(senderPrx, receiver, communicator);
             controller.executeClient();
 
             communicator.waitForShutdown();

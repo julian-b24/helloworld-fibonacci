@@ -19,8 +19,6 @@ public class RegisterServiceImpl implements RegisterService {
     public String registerHost(String hostname, HelloWorldCallbackReceiverPrx proxy) {
         validateHostIsNotInMap(hostname);
         registerMap.put(hostname, proxy);
-        System.out.println(registerMap);
-        proxy.receiveMessage();
         return RegisterResponseMessage.SUCCESSFUL.getMessage() + hostname;
     }
 

@@ -2,6 +2,9 @@ import Deploy.HelloWorldCallbackReceiver;
 import Deploy.HelloWorldCallbackReceiverPrx;
 import Deploy.HelloWorldCallbackSenderPrx;
 import com.zeroc.Ice.Current;
+import com.zeroc.Ice.Communicator;
+
+import constants.MenuOption;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,11 +19,14 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     private HelloWorldCallbackSenderPrx senderPrx;
     private HelloWorldCallbackReceiverPrx receiverPrx;
 
+    private Communicator communicator;
+
     public HelloWorldClientController(){}
 
-    public HelloWorldClientController(HelloWorldCallbackSenderPrx senderPrx, HelloWorldCallbackReceiverPrx receiverPrx){
+    public HelloWorldClientController(HelloWorldCallbackSenderPrx senderPrx, HelloWorldCallbackReceiverPrx receiverPrx, Communicator communicator){
         this.senderPrx = senderPrx;
         this.receiverPrx = receiverPrx;
+        this.communicator = communicator;
     }
 
     @Override
@@ -30,13 +36,64 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
 
     public void executeClient(){
         try {
-            sendRequest(senderPrx, receiverPrx);
+            String menu = getMenu();
+            choseMenuOption(menu);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void sendRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
+    private String getMenu(){
+        String menu = "";
+        menu += MenuOption.REGISTER.getOption() + "\n" +
+                MenuOption.WHO_AM_I.getOption() + "\n" +
+                MenuOption.FIBONACCI.getOption() + "\n" +
+                MenuOption.COMMUNICATIONS.getOption() + "\n" +
+                MenuOption.EXIT.getOption() + "\n";
+        return menu;
+    }
+
+    private void choseMenuOption(String menu) throws IOException {
+        String option;
+        do {
+            System.out.println(menu);
+            System.out.println("Option:");
+            option = READER.readLine();
+
+            if(!option.equals(MenuOption.EXIT.getOption())){
+                executeOption(Integer.parseInt(option));
+            }
+
+        } while (!option.equals(MenuOption.EXIT.getOption()));
+
+        closeServerConnection();
+    }
+
+    private void executeOption(int option) throws IOException {
+        switch (option){
+            case 1:
+                sendRegisterRequest(senderPrx, receiverPrx);
+                break;
+            case 2:
+                System.out.println(getHostName());;
+                break;
+            case 3:
+                sendFibonacciRequest(senderPrx);
+                break;
+            case 4:
+                //TODO: Implement message or broadcast according to input
+                break;
+            default:
+                System.out.println("Unexpected value, choose again.");;
+        }
+    }
+
+    private void closeServerConnection() {
+        System.out.println("See you the next time!");
+        communicator.close();
+    }
+
+    private void sendFibonacciRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
         String hostname = getHostName();
         String input = "";
         do {
@@ -48,7 +105,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         } while (!input.equals(EXIT_STRING));
     }
 
-    private void sendRequest(HelloWorldCallbackSenderPrx senderPrx, HelloWorldCallbackReceiverPrx receiverPrx) throws IOException {
+    private void sendRegisterRequest(HelloWorldCallbackSenderPrx senderPrx, HelloWorldCallbackReceiverPrx receiverPrx) throws IOException {
         String hostname = getHostName();
         System.out.println(senderPrx.registerClient(receiverPrx, hostname));
     }
