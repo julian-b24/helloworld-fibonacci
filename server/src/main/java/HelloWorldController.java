@@ -22,17 +22,22 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
         showMessageCmd(hostname, input);
         int output = 0;
         if(validateInputIsNumber(input)){
-            int inputNumber = new Integer(input);
+            int inputNumber = Integer.parseInt(input);
             output = calculateFibonacci(inputNumber);
             showFibonacciSequence(hostname, inputNumber);
+            return output;
+        }else{
+            //Change to string?
+            return 404;
         }
-        return output;
+        
     }
 
     @Override
     public String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname, Current current) {
         return registerService.registerHost(hostname, proxy);
     }
+
 
     private void showFibonacciSequence(String hostname, int input) {
         while (input > 0){
@@ -54,4 +59,5 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
     private boolean validateInputIsNumber(String input){
         return input.matches("\\d+");
     }
+
 }

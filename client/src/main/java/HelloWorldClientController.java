@@ -82,6 +82,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
                 break;
             case 4:
                 //TODO: Implement message or broadcast according to input
+
                 break;
             default:
                 System.out.println("Unexpected value, choose again.");;
@@ -116,6 +117,18 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         String whoami = READER.readLine();
         String hostname = InetAddress.getLocalHost().getHostName();
         return whoami + "@" + hostname;
+    }
+
+    private void sendCommunicationsRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
+        String hostname = getHostName();
+        String input = "";
+        do {
+            System.out.println("Input:");
+            input = READER.readLine();
+            if(!input.equals(EXIT_STRING)){
+                System.out.println(senderPrx.communications(hostname, input));
+            }
+        } while (!input.equals(EXIT_STRING));
     }
 
 }
