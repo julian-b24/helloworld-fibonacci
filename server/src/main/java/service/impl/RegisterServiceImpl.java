@@ -22,6 +22,11 @@ public class RegisterServiceImpl implements RegisterService {
         return RegisterResponseMessage.SUCCESSFUL.getMessage() + hostname;
     }
 
+    @Override
+    public HelloWorldCallbackReceiverPrx getProxy(String hostname) {
+        return registerMap.get(hostname);
+    }
+
     private void validateHostIsNotInMap(String hostname) {
         if(registerMap.containsKey(hostname)){
             System.out.println("Host is already registered");

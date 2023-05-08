@@ -30,8 +30,8 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     }
 
     @Override
-    public void receiveMessage(Current current) {
-        System.out.println("msg");
+    public void receiveMessage(String msg, Current current) {
+        System.out.println(msg);
     }
 
     public void executeClient(){
