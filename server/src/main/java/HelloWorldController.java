@@ -61,7 +61,7 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
             case 3:
                 //Broadcast
                 String[] bcparts = input.split("C");
-                String bcmessage = hostname+ ": "+parts[1];
+                String bcmessage = hostname+ ": "+ bcparts[1];
                 communicationService.sendBroadcast(hostname, bcmessage);
                 break;
         }
@@ -99,8 +99,7 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
         }else if(input.startsWith("BC")){
             return 3;
         }
+        return 0;
     }
-
-
 
 }

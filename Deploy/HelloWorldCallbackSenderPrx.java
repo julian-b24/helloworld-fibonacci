@@ -101,6 +101,48 @@ public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
         return f;
     }
 
+    default String communications(String hostname, String input)
+    {
+        return communications(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default String communications(String hostname, String input, java.util.Map<String, String> context)
+    {
+        return _iceI_communicationsAsync(hostname, input, context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<java.lang.String> communicationsAsync(String hostname, String input)
+    {
+        return _iceI_communicationsAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<java.lang.String> communicationsAsync(String hostname, String input, java.util.Map<String, String> context)
+    {
+        return _iceI_communicationsAsync(hostname, input, context, false);
+    }
+
+    /**
+     * @hidden
+     * @param iceP_hostname -
+     * @param iceP_input -
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_communicationsAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "communications", null, sync, null);
+        f.invoke(true, context, null, ostr -> {
+                     ostr.writeString(iceP_hostname);
+                     ostr.writeString(iceP_input);
+                 }, istr -> {
+                     String ret;
+                     ret = istr.readString();
+                     return ret;
+                 });
+        return f;
+    }
+
     /**
      * Contacts the remote server to verify that the object implements this type.
      * Raises a local exception if a communication error occurs.
