@@ -27,6 +27,31 @@ public class RegisterServiceImpl implements RegisterService {
         return registerMap.get(hostname);
     }
 
+
+    @Override
+    public String listClients() {
+        String clients="";
+        for (String name : registerMap.keySet()) 
+            clients+="Hostname: " + name + "\n";
+        return clients;
+    }
+
+    @Override
+    public void sendMessage(String destinyHostname, String message) {
+        HelloWorldCallbackReceiverPrx proxy = registerMap.get(destinyHostname);
+        proxy.receiveMessage(message);
+    }
+
+    @Override
+    public void sendBroadcast(String srcHostname, String message) {
+        for (String name : registerMap.keySet()){
+            if(name != srcHostname){
+                HelloWorldCallbackReceiverPrx proxy = registerMap.get(name);
+                proxy.receiveMessage(message);
+            }
+        }
+    }
+
     private void validateHostIsNotInMap(String hostname) {
         if(registerMap.containsKey(hostname)){
             System.out.println("Host is already registered");
