@@ -1,24 +1,18 @@
 import Deploy.HelloWorldCallbackReceiverPrx;
 import com.zeroc.Ice.Current;
 import service.RegisterService;
-import service.impl.CommunicationServiceImpl;
 import service.impl.FibonacciServiceImpl;
-import service.CommunicationService;
 import service.FibonacciService;
 import service.impl.RegisterServiceImpl;
-
-import java.util.ArrayList;
 
 public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
 
     private RegisterService registerService;
     private FibonacciService fibonacciService;
-    private CommunicationService communicationService;
 
     public HelloWorldController(){
         registerService = new RegisterServiceImpl();
         fibonacciService = new FibonacciServiceImpl();
-        communicationService = new CommunicationServiceImpl();
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RegisterServiceImpl implements RegisterService {
 
-    private Map<String, Object> registerMap;
+    private Map<String, HelloWorldCallbackReceiverPrx> registerMap;
 
     public RegisterServiceImpl(){
         registerMap = new HashMap<>();
@@ -45,7 +45,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public void sendBroadcast(String srcHostname, String message) {
         for (String name : registerMap.keySet()){
-            if(name != srcHostname){
+            if(!name.equals(srcHostname)){
                 HelloWorldCallbackReceiverPrx proxy = registerMap.get(name);
                 proxy.receiveMessage(message);
             }
