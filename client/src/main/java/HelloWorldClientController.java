@@ -16,6 +16,8 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     private final static BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
     private final static String EXIT_STRING = "exit";
 
+    private final static int[] FIBONACCI_TIMEOUT_ARRAY = {500, 400, 300, 200, 100, 95, 90};
+
     private HelloWorldCallbackSenderPrx senderPrx;
     private HelloWorldCallbackReceiverPrx receiverPrx;
 
@@ -38,6 +40,21 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         try {
             String menu = getMenu();
             choseMenuOption(menu);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void executeFibonacciTimeout() {
+        int index = 0;
+        String hostname = null;
+        try {
+            hostname = getHostName();
+            while(index < FIBONACCI_TIMEOUT_ARRAY.length){
+                int number = FIBONACCI_TIMEOUT_ARRAY[index];
+                System.out.println(senderPrx.printFibonacci(hostname, String.valueOf(number)));
+                index++;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -81,8 +98,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
                 sendFibonacciRequest(senderPrx);
                 break;
             case 4:
-                //TODO: Implement message or broadcast according to input
-
+                sendCommunicationsRequest(senderPrx);
                 break;
             default:
                 System.out.println("Unexpected value, choose again.");;
