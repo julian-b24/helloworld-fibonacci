@@ -48,7 +48,7 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
 
         switch(checkMessage(input)){
             case 1:
-                communicationService.listClients();
+                registerService.listClients();
                 break;
             case 2:
                 //Message
@@ -56,13 +56,13 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
                 String recieverName = parts[0];
                 String message = hostname+ ": "+parts[1];
                 recieverName = recieverName.replaceFirst("^to ", "");
-                communicationService.sendMessage(recieverName, message);
+                registerService.sendMessage(recieverName, message);
                 break;
             case 3:
                 //Broadcast
                 String[] bcparts = input.split("C");
                 String bcmessage = hostname+ ": "+ bcparts[1];
-                communicationService.sendBroadcast(hostname, bcmessage);
+                registerService.sendBroadcast(hostname, bcmessage);
                 break;
         }
 
