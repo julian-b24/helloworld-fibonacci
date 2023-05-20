@@ -21,7 +21,9 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     private final static String EXIT_STRING = "exit";
 
     private int FIBONACCI_TIMEOUT_ARRAY_SIZE = 100000;
+
     private int FIBONACCI_TIMEOUT_MAX_VALUE = 100;
+    private int FIBONACCI_TIMEOUT_MIN_VALUE = 50;
 
 
     private HelloWorldCallbackSenderPrx senderPrx;
@@ -196,7 +198,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     }
 
     private int[] createFibonacciTimeOutArray(){
-        return new Random().ints(FIBONACCI_TIMEOUT_ARRAY_SIZE, 50, FIBONACCI_TIMEOUT_MAX_VALUE + 1).toArray();
+        return new Random().ints(FIBONACCI_TIMEOUT_ARRAY_SIZE, FIBONACCI_TIMEOUT_MIN_VALUE, FIBONACCI_TIMEOUT_MAX_VALUE + 1).toArray();
     }
 
 }

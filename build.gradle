@@ -3,6 +3,7 @@
 //
 plugins {
     id 'com.zeroc.gradle.ice-builder.slice' version '1.4.7' apply false
+    id 'org.hidetake.ssh' version '2.10.1' apply false
 }
   
 subprojects {
@@ -11,6 +12,7 @@ subprojects {
     //
     apply plugin: 'java'
     apply plugin: 'com.zeroc.gradle.ice-builder.slice'
+    apply plugin: 'org.hidetake.ssh'
  
     //
     // Both Client and Server projects share the HelloWorldCallback.ice Slice definitions
@@ -19,6 +21,19 @@ subprojects {
         java {
             files = [file("../HelloWorldCallback.ice")]
         }
+    }
+
+    remotes {
+        server{
+            host = 'xhgrid19'
+            user = 'swarch'
+            password = 'swarch'
+        }
+    }
+
+    ssh.settings {
+        dryRun = project.hasProperty('dryRun')
+        knownHosts = allowAnyHosts
     }
  
     //
@@ -47,4 +62,20 @@ subprojects {
             )
         }
     }
+
+    def remoteFolder = "A00365918/tarea3"
+
+    task deploy {
+        doLast {
+            ssh.run {
+                session(remotes.server){
+                    execute 'ls A00365918/tarea3'
+                    //put from: "server/build/libs/server.jar", into: '.', override: true
+                }
+            }
+            println "Server Deployed"
+        }
+        dependsOn build
+    }
+
 }
