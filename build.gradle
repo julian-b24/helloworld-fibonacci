@@ -24,10 +24,25 @@ subprojects {
     }
 
     remotes {
-        server{
+        xhgrid19{
             host = 'xhgrid19'
             user = 'swarch'
             password = 'swarch'
+            agent = true
+        }
+
+        xhgrid18{
+            host = 'xhgrid18'
+            user = 'swarch'
+            password = 'swarch'
+            agent = true
+        }
+
+        xhgrid17{
+            host = 'xhgrid17'
+            user = 'swarch'
+            password = 'swarch'
+            agent = true
         }
     }
 
@@ -64,14 +79,31 @@ subprojects {
     }
 
     def remoteFolder = "A00365918/tarea3"
+    def PROJECT_PATH = path
 
     task deploy {
         doLast {
             ssh.run {
-                session(remotes.server){
-                    execute 'ls A00365918/tarea3'
-                    //put from: "server/build/libs/server.jar", into: '.', override: true
+                if (name == 'server'){
+                    session(remotes.xhgrid19){
+                        def local = execute 'pwd'
+                        put from: "$PROJECT_PATH/build/libs/server.jar", into: "$local/$remoteFolder", override: true
+                    }
                 }
+
+                if (name == 'client'){
+                    session(remotes.xhgrid18){
+                        def local = execute 'pwd'
+                        put from: "$PROJECT_PATH/build/libs/client.jar", into: "$local/$remoteFolder", override: true
+                    }
+
+                    session(remotes.xhgrid17){
+                        def local = execute 'pwd'
+                        put from: "$PROJECT_PATH/build/libs/client.jar", into: "$local/$remoteFolder", override: true
+                    }
+                }
+
+
             }
             println "Server Deployed"
         }
