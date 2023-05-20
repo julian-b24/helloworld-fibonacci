@@ -1,2 +1,3 @@
 Printer.Endpoints=tcp -p 9099
 Ice.Default.Host=hgrid19
+Ice.ThreadPool.Server.Size=3
