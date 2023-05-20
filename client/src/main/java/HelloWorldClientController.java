@@ -55,13 +55,13 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     public void executeFibonacciTimeout() {
         int index = 0;
         String hostname = "";
-        ArrayList<CompletableFuture<Integer>> calculatedNumbers = new ArrayList<>();
+        ArrayList<CompletableFuture<String>> calculatedNumbers = new ArrayList<>();
 
         try {
             int[] array = createFibonacciTimeOutArray();
             while(index < array.length - 1){
                 int number = array[index];
-                CompletableFuture<Integer> completableFuture = senderPrx.printFibonacciAsync(hostname, String.valueOf(number));
+                CompletableFuture<String> completableFuture = senderPrx.printFibonacciAsync(hostname, String.valueOf(number));
                 calculatedNumbers.add(completableFuture);
                 index++;
             }
@@ -77,7 +77,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         }
     }
 
-    private int getCompletedCalculations(ArrayList<CompletableFuture<Integer>> calculations){
+    private int getCompletedCalculations(ArrayList<CompletableFuture<String>> calculations){
         int completed = (int) calculations.stream().filter(CompletableFuture::isDone).count();
         System.out.print("Completed calculations: " + completed + "\r");
         return completed;
@@ -169,17 +169,17 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         }
     }
 
-    private void sendListRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
-        System.out.println(senderPrx.listClients());
+    private void sendListRequest(HelloWorldCallbackSenderPrx senderPrx) {
+        System.out.println(senderPrx.listClients() + "\n");
     }
 
     private void sendMessageRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
         String input = "";
         do {
-            System.out.println("Enter your message in the following format --> destinyHost:message");
+            System.out.println("\nEnter your message in the following format --> to destinyHost:message");
             input = READER.readLine();
             if(!input.equals(EXIT_STRING)){
-                senderPrx.sendMessage(hostname, input);
+                System.out.println(senderPrx.sendMessage(hostname, input) + "\n");
             }
         } while (!input.equals(EXIT_STRING));
     }
@@ -187,7 +187,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     private void sendBroadcastRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
         String input = "";
         do {
-            System.out.println("Enter your broadcast message in the following format --> BC:message");
+            System.out.println("\nEnter your broadcast message in the following format --> BC:message");
             input = READER.readLine();
             if(!input.equals(EXIT_STRING)){
                 senderPrx.sendBroadcast(hostname, input);

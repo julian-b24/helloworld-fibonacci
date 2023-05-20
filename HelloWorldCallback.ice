@@ -7,9 +7,9 @@ module Deploy
 
     interface HelloWorldCallbackSender
     {
-        int printFibonacci(string hostname, string input);
+        string printFibonacci(string hostname, string input);
         string registerClient(HelloWorldCallbackReceiver* proxy, string hostname);
-        void sendMessage(string hostname, string input);
+        string sendMessage(string hostname, string input);
         void sendBroadcast(string hostname, string input);
         string listClients();
     }

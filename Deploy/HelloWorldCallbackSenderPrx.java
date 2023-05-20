@@ -17,22 +17,22 @@ package Deploy;
 
 public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
 {
-    default int printFibonacci(String hostname, String input)
+    default String printFibonacci(String hostname, String input)
     {
         return printFibonacci(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
     }
 
-    default int printFibonacci(String hostname, String input, java.util.Map<String, String> context)
+    default String printFibonacci(String hostname, String input, java.util.Map<String, String> context)
     {
         return _iceI_printFibonacciAsync(hostname, input, context, true).waitForResponse();
     }
 
-    default java.util.concurrent.CompletableFuture<java.lang.Integer> printFibonacciAsync(String hostname, String input)
+    default java.util.concurrent.CompletableFuture<java.lang.String> printFibonacciAsync(String hostname, String input)
     {
         return _iceI_printFibonacciAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
     }
 
-    default java.util.concurrent.CompletableFuture<java.lang.Integer> printFibonacciAsync(String hostname, String input, java.util.Map<String, String> context)
+    default java.util.concurrent.CompletableFuture<java.lang.String> printFibonacciAsync(String hostname, String input, java.util.Map<String, String> context)
     {
         return _iceI_printFibonacciAsync(hostname, input, context, false);
     }
@@ -45,15 +45,15 @@ public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
      * @param sync -
      * @return -
      **/
-    default com.zeroc.IceInternal.OutgoingAsync<java.lang.Integer> _iceI_printFibonacciAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
+    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_printFibonacciAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
     {
-        com.zeroc.IceInternal.OutgoingAsync<java.lang.Integer> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "printFibonacci", null, sync, null);
+        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "printFibonacci", null, sync, null);
         f.invoke(true, context, null, ostr -> {
                      ostr.writeString(iceP_hostname);
                      ostr.writeString(iceP_input);
                  }, istr -> {
-                     int ret;
-                     ret = istr.readInt();
+                     String ret;
+                     ret = istr.readString();
                      return ret;
                  });
         return f;
@@ -101,22 +101,22 @@ public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
         return f;
     }
 
-    default void sendMessage(String hostname, String input)
+    default String sendMessage(String hostname, String input)
     {
-        sendMessage(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+        return sendMessage(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
     }
 
-    default void sendMessage(String hostname, String input, java.util.Map<String, String> context)
+    default String sendMessage(String hostname, String input, java.util.Map<String, String> context)
     {
-        _iceI_sendMessageAsync(hostname, input, context, true).waitForResponse();
+        return _iceI_sendMessageAsync(hostname, input, context, true).waitForResponse();
     }
 
-    default java.util.concurrent.CompletableFuture<Void> sendMessageAsync(String hostname, String input)
+    default java.util.concurrent.CompletableFuture<java.lang.String> sendMessageAsync(String hostname, String input)
     {
         return _iceI_sendMessageAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
     }
 
-    default java.util.concurrent.CompletableFuture<Void> sendMessageAsync(String hostname, String input, java.util.Map<String, String> context)
+    default java.util.concurrent.CompletableFuture<java.lang.String> sendMessageAsync(String hostname, String input, java.util.Map<String, String> context)
     {
         return _iceI_sendMessageAsync(hostname, input, context, false);
     }
@@ -129,13 +129,17 @@ public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
      * @param sync -
      * @return -
      **/
-    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_sendMessageAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
+    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_sendMessageAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
     {
-        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "sendMessage", null, sync, null);
-        f.invoke(false, context, null, ostr -> {
+        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "sendMessage", null, sync, null);
+        f.invoke(true, context, null, ostr -> {
                      ostr.writeString(iceP_hostname);
                      ostr.writeString(iceP_input);
-                 }, null);
+                 }, istr -> {
+                     String ret;
+                     ret = istr.readString();
+                     return ret;
+                 });
         return f;
     }
 

@@ -1,6 +1,8 @@
 package service.impl;
 
 import Deploy.HelloWorldCallbackReceiverPrx;
+import com.zeroc.Ice.ConnectFailedException;
+import constants.CommunicationsResponseMessage;
 import constants.RegisterResponseMessage;
 import service.RegisterService;
 
@@ -37,9 +39,18 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void sendMessage(String destinyHostname, String message) {
-        HelloWorldCallbackReceiverPrx proxy = registerMap.get(destinyHostname);
-        proxy.receiveMessage(message);
+    public String sendMessage(String destinyHostname, String message) {
+        String responseStatusMsg = "";
+
+        try{
+            validateHostIsRegistered(destinyHostname);
+            HelloWorldCallbackReceiverPrx proxy = registerMap.get(destinyHostname);
+            proxy.receiveMessage(message);
+            responseStatusMsg = CommunicationsResponseMessage.SUCCESSFUL.getMessage();
+        }catch (ConnectFailedException connectFailed){
+            responseStatusMsg = CommunicationsResponseMessage.FAIL.getMessage();
+        }
+        return responseStatusMsg;
     }
 
     @Override
@@ -54,7 +65,13 @@ public class RegisterServiceImpl implements RegisterService {
 
     private void validateHostIsNotInMap(String hostname) {
         if(registerMap.containsKey(hostname)){
-            System.out.println("Host is already registered");
+            System.out.println(RegisterResponseMessage.FAIL_HOST_EXISTS.getMessage());
+        }
+    }
+
+    private void validateHostIsRegistered(String hostname) {
+        if(!registerMap.containsKey(hostname)){
+            throw new ConnectFailedException();
         }
     }
 }

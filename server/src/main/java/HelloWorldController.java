@@ -16,17 +16,16 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
     }
 
     @Override
-    public int printFibonacci(String hostname, String input, Current current) {
+    public String printFibonacci(String hostname, String input, Current current) {
         showMessageCmd(hostname, input);
         int output = 0;
         if(validateInputIsNumber(input)){
             int inputNumber = Integer.parseInt(input);
             output = calculateFibonacci(inputNumber);
             showFibonacciSequence(hostname, inputNumber);
-            return output;
+            return output + "";
         }else{
-            //Change to string? Remeber slice2java, ice config file
-            return 404;
+            return input;
         }
         
     }
@@ -37,13 +36,13 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
     }
 
     @Override
-    public void sendMessage(String hostname, String input, Current current) {
+    public String sendMessage(String hostname, String input, Current current) {
         showMessageCmd(hostname, input);
         String[] parts = input.split(":");
         String receiverName = parts[0];
         String message = hostname+ ": "+parts[1];
         receiverName = receiverName.replaceFirst("^to ", "");
-        registerService.sendMessage(receiverName, message);
+        return registerService.sendMessage(receiverName, message);
     }
 
     @Override
@@ -57,7 +56,6 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
     public String listClients(Current current) {
         return registerService.listClients();
     }
-
 
     private void showFibonacciSequence(String hostname, int input) {
         while (input > 0){
@@ -78,17 +76,6 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
 
     private boolean validateInputIsNumber(String input){
         return input.matches("\\d+");
-    }
-
-    private int checkMessage(String input){
-        if(input.equals("list clients")){
-            return 1;
-        }else if (input.startsWith("to")){
-            return 2;
-        }else if(input.startsWith("BC")){
-            return 3;
-        }
-        return 0;
     }
 
 }

@@ -17,11 +17,11 @@ package Deploy;
 
 public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
 {
-    int printFibonacci(String hostname, String input, com.zeroc.Ice.Current current);
+    String printFibonacci(String hostname, String input, com.zeroc.Ice.Current current);
 
     String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname, com.zeroc.Ice.Current current);
 
-    void sendMessage(String hostname, String input, com.zeroc.Ice.Current current);
+    String sendMessage(String hostname, String input, com.zeroc.Ice.Current current);
 
     void sendBroadcast(String hostname, String input, com.zeroc.Ice.Current current);
 
@@ -67,9 +67,9 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
         iceP_hostname = istr.readString();
         iceP_input = istr.readString();
         inS.endReadParams();
-        int ret = obj.printFibonacci(iceP_hostname, iceP_input, current);
+        String ret = obj.printFibonacci(iceP_hostname, iceP_input, current);
         com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
-        ostr.writeInt(ret);
+        ostr.writeString(ret);
         inS.endWriteParams(ostr);
         return inS.setResult(ostr);
     }
@@ -113,8 +113,11 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
         iceP_hostname = istr.readString();
         iceP_input = istr.readString();
         inS.endReadParams();
-        obj.sendMessage(iceP_hostname, iceP_input, current);
-        return inS.setResult(inS.writeEmptyParams());
+        String ret = obj.sendMessage(iceP_hostname, iceP_input, current);
+        com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
+        ostr.writeString(ret);
+        inS.endWriteParams(ostr);
+        return inS.setResult(ostr);
     }
 
     /**
