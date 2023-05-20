@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a clients=(swarch@xhgrid18 swarch@xhgrid17)
+declare -a clients=(swarch@xhgrid18 swarch@xhgrid17 swarch@xhgrid16)
 declare server=swarch@xhgrid19
 
 deploy_clients(){
