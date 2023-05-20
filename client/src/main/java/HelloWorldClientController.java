@@ -22,8 +22,8 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
 
     private int FIBONACCI_TIMEOUT_ARRAY_SIZE = 100000;
 
-    private int FIBONACCI_TIMEOUT_MAX_VALUE = 100;
-    private int FIBONACCI_TIMEOUT_MIN_VALUE = 50;
+    private int FIBONACCI_TIMEOUT_MAX_VALUE = 50;
+    private int FIBONACCI_TIMEOUT_MIN_VALUE = 0;
 
 
     private HelloWorldCallbackSenderPrx senderPrx;
@@ -63,19 +63,13 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
             int[] array = createFibonacciTimeOutArray();
             while(index < array.length - 1){
                 int number = array[index];
-                CompletableFuture<String> completableFuture = senderPrx.printFibonacciAsync(hostname, String.valueOf(number));
-                calculatedNumbers.add(completableFuture);
+                senderPrx.printFibonacci(hostname, String.valueOf(number));
                 index++;
             }
 
-            boolean pendingCalculations = true;
-            while (pendingCalculations){
-                pendingCalculations = getCompletedCalculations(calculatedNumbers) != calculatedNumbers.size();
-            }
-
         } catch (TimeoutException timeoutException) {
-            getCompletedCalculations(calculatedNumbers);
             System.out.println("TIMEOUT");
+            System.out.println(index+1);
         }
     }
 

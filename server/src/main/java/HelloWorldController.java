@@ -2,6 +2,7 @@ import Deploy.HelloWorldCallbackReceiverPrx;
 import com.zeroc.Ice.Current;
 import service.RegisterService;
 import service.impl.FibonacciServiceImpl;
+import service.impl.FibonacciServiceImplRecursive;
 import service.FibonacciService;
 import service.impl.RegisterServiceImpl;
 
@@ -12,7 +13,7 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
 
     public HelloWorldController(){
         registerService = new RegisterServiceImpl();
-        fibonacciService = new FibonacciServiceImpl();
+        fibonacciService = new FibonacciServiceImplRecursive();
     }
 
     @Override
