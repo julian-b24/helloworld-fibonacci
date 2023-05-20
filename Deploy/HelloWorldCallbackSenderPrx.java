@@ -101,24 +101,24 @@ public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
         return f;
     }
 
-    default String communications(String hostname, String input)
+    default void sendMessage(String hostname, String input)
     {
-        return communications(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+        sendMessage(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
     }
 
-    default String communications(String hostname, String input, java.util.Map<String, String> context)
+    default void sendMessage(String hostname, String input, java.util.Map<String, String> context)
     {
-        return _iceI_communicationsAsync(hostname, input, context, true).waitForResponse();
+        _iceI_sendMessageAsync(hostname, input, context, true).waitForResponse();
     }
 
-    default java.util.concurrent.CompletableFuture<java.lang.String> communicationsAsync(String hostname, String input)
+    default java.util.concurrent.CompletableFuture<Void> sendMessageAsync(String hostname, String input)
     {
-        return _iceI_communicationsAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+        return _iceI_sendMessageAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
     }
 
-    default java.util.concurrent.CompletableFuture<java.lang.String> communicationsAsync(String hostname, String input, java.util.Map<String, String> context)
+    default java.util.concurrent.CompletableFuture<Void> sendMessageAsync(String hostname, String input, java.util.Map<String, String> context)
     {
-        return _iceI_communicationsAsync(hostname, input, context, false);
+        return _iceI_sendMessageAsync(hostname, input, context, false);
     }
 
     /**
@@ -129,13 +129,84 @@ public interface HelloWorldCallbackSenderPrx extends com.zeroc.Ice.ObjectPrx
      * @param sync -
      * @return -
      **/
-    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_communicationsAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_sendMessageAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
     {
-        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "communications", null, sync, null);
-        f.invoke(true, context, null, ostr -> {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "sendMessage", null, sync, null);
+        f.invoke(false, context, null, ostr -> {
                      ostr.writeString(iceP_hostname);
                      ostr.writeString(iceP_input);
-                 }, istr -> {
+                 }, null);
+        return f;
+    }
+
+    default void sendBroadcast(String hostname, String input)
+    {
+        sendBroadcast(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default void sendBroadcast(String hostname, String input, java.util.Map<String, String> context)
+    {
+        _iceI_sendBroadcastAsync(hostname, input, context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> sendBroadcastAsync(String hostname, String input)
+    {
+        return _iceI_sendBroadcastAsync(hostname, input, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> sendBroadcastAsync(String hostname, String input, java.util.Map<String, String> context)
+    {
+        return _iceI_sendBroadcastAsync(hostname, input, context, false);
+    }
+
+    /**
+     * @hidden
+     * @param iceP_hostname -
+     * @param iceP_input -
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_sendBroadcastAsync(String iceP_hostname, String iceP_input, java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "sendBroadcast", null, sync, null);
+        f.invoke(false, context, null, ostr -> {
+                     ostr.writeString(iceP_hostname);
+                     ostr.writeString(iceP_input);
+                 }, null);
+        return f;
+    }
+
+    default String listClients()
+    {
+        return listClients(com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default String listClients(java.util.Map<String, String> context)
+    {
+        return _iceI_listClientsAsync(context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<java.lang.String> listClientsAsync()
+    {
+        return _iceI_listClientsAsync(com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<java.lang.String> listClientsAsync(java.util.Map<String, String> context)
+    {
+        return _iceI_listClientsAsync(context, false);
+    }
+
+    /**
+     * @hidden
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_listClientsAsync(java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "listClients", null, sync, null);
+        f.invoke(true, context, null, null, istr -> {
                      String ret;
                      ret = istr.readString();
                      return ret;

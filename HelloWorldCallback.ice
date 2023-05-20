@@ -9,6 +9,8 @@ module Deploy
     {
         int printFibonacci(string hostname, string input);
         string registerClient(HelloWorldCallbackReceiver* proxy, string hostname);
-        string communications(string hostname, string input);
+        void sendMessage(string hostname, string input);
+        void sendBroadcast(string hostname, string input);
+        string listClients();
     }
 }

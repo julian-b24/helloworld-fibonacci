@@ -28,8 +28,8 @@ public class Client {
             );
 
             HelloWorldClientController controller = new HelloWorldClientController(senderPrx, receiver, communicator);
-            //controller.executeClient();
-            controller.executeFibonacciTimeout();
+            controller.executeClient();
+            //controller.executeFibonacciTimeout();
 
             communicator.waitForShutdown();
 

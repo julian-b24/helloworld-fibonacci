@@ -4,25 +4,30 @@ import Deploy.HelloWorldCallbackSenderPrx;
 import com.zeroc.Ice.Current;
 import com.zeroc.Ice.Communicator;
 
+import com.zeroc.Ice.TimeoutException;
 import constants.MenuOption;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class HelloWorldClientController implements HelloWorldCallbackReceiver {
 
     private final static BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
     private final static String EXIT_STRING = "exit";
 
-    private final static int[] FIBONACCI_TIMEOUT_ARRAY = {500, 400, 300, 200, 100, 95, 90};
+    private int FIBONACCI_TIMEOUT_ARRAY_SIZE = 100000;
+    private int FIBONACCI_TIMEOUT_MAX_VALUE = 100;
+
 
     private HelloWorldCallbackSenderPrx senderPrx;
     private HelloWorldCallbackReceiverPrx receiverPrx;
-
     private Communicator communicator;
+    private String hostname;
 
     public HelloWorldClientController(){}
 
@@ -30,6 +35,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         this.senderPrx = senderPrx;
         this.receiverPrx = receiverPrx;
         this.communicator = communicator;
+        this.hostname = defineHostname();
     }
 
     @Override
@@ -48,17 +54,33 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
 
     public void executeFibonacciTimeout() {
         int index = 0;
-        String hostname = null;
+        String hostname = "";
+        ArrayList<CompletableFuture<Integer>> calculatedNumbers = new ArrayList<>();
+
         try {
-            hostname = getHostName();
-            while(index < FIBONACCI_TIMEOUT_ARRAY.length){
-                int number = FIBONACCI_TIMEOUT_ARRAY[index];
+            int[] array = createFibonacciTimeOutArray();
+            while(index < array.length - 1){
+                int number = array[index];
                 CompletableFuture<Integer> completableFuture = senderPrx.printFibonacciAsync(hostname, String.valueOf(number));
+                calculatedNumbers.add(completableFuture);
                 index++;
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            boolean pendingCalculations = true;
+            while (pendingCalculations){
+                pendingCalculations = getCompletedCalculations(calculatedNumbers) != calculatedNumbers.size();
+            }
+
+        } catch (TimeoutException timeoutException) {
+            getCompletedCalculations(calculatedNumbers);
+            System.out.println("TIMEOUT");
         }
+    }
+
+    private int getCompletedCalculations(ArrayList<CompletableFuture<Integer>> calculations){
+        int completed = (int) calculations.stream().filter(CompletableFuture::isDone).count();
+        System.out.print("Completed calculations: " + completed + "\r");
+        return completed;
     }
 
     private String getMenu(){
@@ -66,7 +88,9 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
         menu += MenuOption.REGISTER.getOption() + "\n" +
                 MenuOption.WHO_AM_I.getOption() + "\n" +
                 MenuOption.FIBONACCI.getOption() + "\n" +
-                MenuOption.COMMUNICATIONS.getOption() + "\n" +
+                MenuOption.LIST_CLIENTS.getOption() + "\n" +
+                MenuOption.SEND_MESSAGE.getOption() + "\n" +
+                MenuOption.BROADCAST.getOption() + "\n" +
                 MenuOption.EXIT.getOption() + "\n";
         return menu;
     }
@@ -93,13 +117,19 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
                 sendRegisterRequest(senderPrx, receiverPrx);
                 break;
             case 2:
-                System.out.println(getHostName());;
+                System.out.println(hostname);;
                 break;
             case 3:
                 sendFibonacciRequest(senderPrx);
                 break;
             case 4:
-                sendCommunicationsRequest(senderPrx);
+                sendListRequest(senderPrx);
+                break;
+            case 5:
+                sendMessageRequest(senderPrx);
+                break;
+            case 6:
+                sendBroadcastRequest(senderPrx);
                 break;
             default:
                 System.out.println("Unexpected value, choose again.");;
@@ -112,7 +142,6 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     }
 
     private void sendFibonacciRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
-        String hostname = getHostName();
         String input = "";
         do {
             System.out.println("Input:");
@@ -124,28 +153,50 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
     }
 
     private void sendRegisterRequest(HelloWorldCallbackSenderPrx senderPrx, HelloWorldCallbackReceiverPrx receiverPrx) throws IOException {
-        String hostname = getHostName();
         System.out.println(senderPrx.registerClient(receiverPrx, hostname));
     }
 
 
-    private static String getHostName() throws IOException {
-        System.out.println("Who are you? :");
-        String whoami = READER.readLine();
-        String hostname = InetAddress.getLocalHost().getHostName();
-        return whoami + "@" + hostname;
+    private String defineHostname() {
+        System.out.println("Who are you? Enter your current user:");
+        String whoami = "";
+        try {
+            whoami = READER.readLine();
+            String hostname = InetAddress.getLocalHost().getHostName();
+            return whoami + "@" + hostname;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void sendCommunicationsRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
-        String hostname = getHostName();
+    private void sendListRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
+        System.out.println(senderPrx.listClients());
+    }
+
+    private void sendMessageRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
         String input = "";
         do {
-            System.out.println("Input:");
+            System.out.println("Enter your message in the following format --> destinyHost:message");
             input = READER.readLine();
             if(!input.equals(EXIT_STRING)){
-                System.out.println(senderPrx.communications(hostname, input));
+                senderPrx.sendMessage(hostname, input);
             }
         } while (!input.equals(EXIT_STRING));
+    }
+
+    private void sendBroadcastRequest(HelloWorldCallbackSenderPrx senderPrx) throws IOException {
+        String input = "";
+        do {
+            System.out.println("Enter your broadcast message in the following format --> BC:message");
+            input = READER.readLine();
+            if(!input.equals(EXIT_STRING)){
+                senderPrx.sendBroadcast(hostname, input);
+            }
+        } while (!input.equals(EXIT_STRING));
+    }
+
+    private int[] createFibonacciTimeOutArray(){
+        return new Random().ints(FIBONACCI_TIMEOUT_ARRAY_SIZE, 50, FIBONACCI_TIMEOUT_MAX_VALUE + 1).toArray();
     }
 
 }

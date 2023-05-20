@@ -21,7 +21,11 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
 
     String registerClient(HelloWorldCallbackReceiverPrx proxy, String hostname, com.zeroc.Ice.Current current);
 
-    String communications(String hostname, String input, com.zeroc.Ice.Current current);
+    void sendMessage(String hostname, String input, com.zeroc.Ice.Current current);
+
+    void sendBroadcast(String hostname, String input, com.zeroc.Ice.Current current);
+
+    String listClients(com.zeroc.Ice.Current current);
 
     /** @hidden */
     static final String[] _iceIds =
@@ -100,7 +104,7 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
      * @param current -
      * @return -
     **/
-    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_communications(HelloWorldCallbackSender obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_sendMessage(HelloWorldCallbackSender obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
     {
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
         com.zeroc.Ice.InputStream istr = inS.startReadParams();
@@ -109,7 +113,42 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
         iceP_hostname = istr.readString();
         iceP_input = istr.readString();
         inS.endReadParams();
-        String ret = obj.communications(iceP_hostname, iceP_input, current);
+        obj.sendMessage(iceP_hostname, iceP_input, current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_sendBroadcast(HelloWorldCallbackSender obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        String iceP_hostname;
+        String iceP_input;
+        iceP_hostname = istr.readString();
+        iceP_input = istr.readString();
+        inS.endReadParams();
+        obj.sendBroadcast(iceP_hostname, iceP_input, current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_listClients(HelloWorldCallbackSender obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        inS.readEmptyParams();
+        String ret = obj.listClients(current);
         com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
         ostr.writeString(ret);
         inS.endWriteParams(ostr);
@@ -119,13 +158,15 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
     /** @hidden */
     final static String[] _iceOps =
     {
-        "communications",
         "ice_id",
         "ice_ids",
         "ice_isA",
         "ice_ping",
+        "listClients",
         "printFibonacci",
-        "registerClient"
+        "registerClient",
+        "sendBroadcast",
+        "sendMessage"
     };
 
     /** @hidden */
@@ -143,23 +184,23 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
         {
             case 0:
             {
-                return _iceD_communications(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_id(this, in, current);
             }
             case 1:
             {
-                return com.zeroc.Ice.Object._iceD_ice_id(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_ids(this, in, current);
             }
             case 2:
             {
-                return com.zeroc.Ice.Object._iceD_ice_ids(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_isA(this, in, current);
             }
             case 3:
             {
-                return com.zeroc.Ice.Object._iceD_ice_isA(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_ping(this, in, current);
             }
             case 4:
             {
-                return com.zeroc.Ice.Object._iceD_ice_ping(this, in, current);
+                return _iceD_listClients(this, in, current);
             }
             case 5:
             {
@@ -168,6 +209,14 @@ public interface HelloWorldCallbackSender extends com.zeroc.Ice.Object
             case 6:
             {
                 return _iceD_registerClient(this, in, current);
+            }
+            case 7:
+            {
+                return _iceD_sendBroadcast(this, in, current);
+            }
+            case 8:
+            {
+                return _iceD_sendMessage(this, in, current);
             }
         }
 

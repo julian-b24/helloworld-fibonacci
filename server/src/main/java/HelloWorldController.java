@@ -37,32 +37,27 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
     }
 
     @Override
-    public String communications(String hostname, String input, Current current) {
+    public void sendMessage(String hostname, String input, Current current) {
         showMessageCmd(hostname, input);
-
-        switch(checkMessage(input)){
-            case 1:
-                registerService.listClients();
-                break;
-            case 2:
-                //Message
-                String[] parts = input.split(":");
-                String recieverName = parts[0];
-                String message = hostname+ ": "+parts[1];
-                recieverName = recieverName.replaceFirst("^to ", "");
-                registerService.sendMessage(recieverName, message);
-                break;
-            case 3:
-                //Broadcast
-                String[] bcparts = input.split("C");
-                String bcmessage = hostname+ ": "+ bcparts[1];
-                registerService.sendBroadcast(hostname, bcmessage);
-                break;
-        }
-
-        return "";
-        
+        String[] parts = input.split(":");
+        String receiverName = parts[0];
+        String message = hostname+ ": "+parts[1];
+        receiverName = receiverName.replaceFirst("^to ", "");
+        registerService.sendMessage(receiverName, message);
     }
+
+    @Override
+    public void sendBroadcast(String hostname, String input, Current current) {
+        String[] bcparts = input.split(":");
+        String bcmessage = hostname+ ": "+ bcparts[1];
+        registerService.sendBroadcast(hostname, bcmessage);
+    }
+
+    @Override
+    public String listClients(Current current) {
+        return registerService.listClients();
+    }
+
 
     private void showFibonacciSequence(String hostname, int input) {
         while (input > 0){
