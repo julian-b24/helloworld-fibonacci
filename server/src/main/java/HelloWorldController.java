@@ -13,7 +13,7 @@ public class HelloWorldController implements Deploy.HelloWorldCallbackSender {
 
     public HelloWorldController(){
         registerService = new RegisterServiceImpl();
-        fibonacciService = new FibonacciServiceImplRecursive();
+        fibonacciService = new FibonacciServiceImpl();
     }
 
     @Override
