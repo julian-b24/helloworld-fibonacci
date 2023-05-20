@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.concurrent.CompletableFuture;
 
 public class HelloWorldClientController implements HelloWorldCallbackReceiver {
 
@@ -52,7 +53,7 @@ public class HelloWorldClientController implements HelloWorldCallbackReceiver {
             hostname = getHostName();
             while(index < FIBONACCI_TIMEOUT_ARRAY.length){
                 int number = FIBONACCI_TIMEOUT_ARRAY[index];
-                System.out.println(senderPrx.printFibonacci(hostname, String.valueOf(number)));
+                CompletableFuture<Integer> completableFuture = senderPrx.printFibonacciAsync(hostname, String.valueOf(number));
                 index++;
             }
         } catch (IOException e) {
